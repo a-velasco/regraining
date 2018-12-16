@@ -21,38 +21,36 @@ int main( int argc, char* argv[] )
   // Check inputs
   if( argc != 4 )
   {
-    std::cout << "Usage:\n" << "argv[1]: (IN)  Original (before histogram matching) image path\n" 
+    std::cout << "Usage:\n" << "argv[1]: (IN)  Original (before histogram matching) image path\n"
                             << "argv[2]: (IN)  Color matched image path\n"
                             << "argv[3]: (OUT) Regrained image path\n";
     return 1;
   }
-
-  typedef cv::Mat ImageType;
 
   std::string originalImageFileName = argv[1];
   std::string colorMatchedImageFileName = argv[2];
   std::string outputImageFileName = argv[3];
 
   // Read original image
-  ImageType originalImage = cv::imread(originalImageFileName);
+  cv::Mat originalImage = cv::imread(originalImageFileName);
   if(! originalImage.data )
   {
-    std::cout <<  "Could not open or find the image" << std::endl ;
+    std::cout <<  "Could not open or find the image" << std::endl;
     return 1;
   }
 
   // Read color matched image
-  ImageType colorMatchedImage = cv::imread(colorMatchedImageFileName);
+  cv::Mat colorMatchedImage = cv::imread(colorMatchedImageFileName);
   if(! colorMatchedImage.data )
   {
-    std::cout <<  "Could not open or find the image" << std::endl ;
+    std::cout <<  "Could not open or find the image" << std::endl;
     return 1;
   }
 
   std::vector< int > nbits = {4, 16, 32, 64, 64, 64};
 
   // Solve
-  ImageType regrainedImage = Regraining< ImageType >::Regrain( originalImage, colorMatchedImage, nbits, 0 );
+  cv::Mat regrainedImage = Regraining< cv::Mat >::Regrain( originalImage, colorMatchedImage, nbits, 0 );
 
   // Create windows for display
   cv::namedWindow( "Original", cv::WINDOW_AUTOSIZE );
@@ -68,5 +66,4 @@ int main( int argc, char* argv[] )
   regrainedImage.convertTo( regrainedImage, CV_64FC3, 255. );
 
   cv::imwrite( outputImageFileName, regrainedImage );
-
 }
